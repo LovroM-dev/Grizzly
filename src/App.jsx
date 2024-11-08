@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { db } from './firebase/firebase'
-import { collection, arrayUnion, arrayRemove, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore'
+import { collection, arrayUnion, arrayRemove, deleteDoc, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore'
 
 function App() {
   const [newName, setNewName] = useState("");
@@ -10,7 +10,10 @@ function App() {
   const [exercises, setExercise] = useState([]);
   
   const exerciseColRef = collection(db, "exercise");
-
+  const deleteExercise = async(id) => {
+    const exerciseDoc = doc(db, "exercise", id)
+    await deleteDoc(exerciseDoc)
+  }
   const addTargetMuscle = () => {
     if (targetInput.trim() !== "") {
       setNewTarget([...newTarget, targetInput.trim()]);
@@ -63,14 +66,17 @@ function App() {
 
       {exercises.map((exercise) => (
         <div key={exercise.id}>
-          <h1>Name: {exercise.name}</h1>
-          <h1>Target muscle:</h1>
-          <button onClick={()=>  {addNewTargetMuscle(exercise.id)}}>Add another muscle</button>
+          <h1>Name: {exercise.name}
+          <button style={{ fontSize: "16px"}} onClick={() => deleteExercise(exercise.id)}>-</button>
+          </h1>
+          <h2>Target muscle:</h2>
+          
           {exercise.target_muscle.map((muscle, index) => (
-            <h2 key={index}>{muscle}
+            <h3 key={index}>{muscle}
             <button onClick={()=> {removeTargetMuscle(exercise.id, muscle)}}>-</button>
-            </h2>
+            </h3>
           ))}
+          <button onClick={()=>  {addNewTargetMuscle(exercise.id)}}>Add another muscle</button>
         </div>
       ))}
     </div>
