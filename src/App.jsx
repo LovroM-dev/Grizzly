@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { db } from './firebase/firebase'
-import { collection, arrayUnion, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore'
+import { collection, arrayUnion, arrayRemove, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore'
 
 function App() {
   const [newName, setNewName] = useState("");
@@ -25,6 +25,11 @@ function App() {
       await updateDoc(exerciseDoc, newField)
     }
   };
+  const removeTargetMuscle = async(id, muscle) => {
+    const exerciseDoc = doc(db, "exercise", id)
+    const newField = {target_muscle: arrayRemove(muscle) }
+    await updateDoc(exerciseDoc, newField)
+  }
   const createExercise = async () => {
     if (newName.trim() !== "") {
       await addDoc(exerciseColRef, { name: newName, target_muscle: newTarget });
@@ -62,7 +67,9 @@ function App() {
           <h1>Target muscle:</h1>
           <button onClick={()=>  {addNewTargetMuscle(exercise.id)}}>Add another muscle</button>
           {exercise.target_muscle.map((muscle, index) => (
-            <h2 key={index}>{muscle}</h2>
+            <h2 key={index}>{muscle}
+            <button onClick={()=> {removeTargetMuscle(exercise.id, muscle)}}>-</button>
+            </h2>
           ))}
         </div>
       ))}
