@@ -1,12 +1,35 @@
 import { useState } from "react";
 import { useAddUserinfo } from "../../hooks/useAdduserinfo";
 import { useGetUserinfo } from "../../hooks/useGetUserinfo";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import {auth} from "../../firebase/firebase"
 export const Register = () => {
     const {addUserinfo} = useAddUserinfo();
     const {userinfo} = useGetUserinfo();
+    const navigate = useNavigate();
+
+    const signUserOut = async () => {
+        try{
+            await signOut(auth);
+            localStorage.clear();
+            navigate("auth")
+        }
+        catch (err){
+            console.log(err)
+        }
+    };
+    const goUser = () => {
+        try {
+            navigate("../user")
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const onSubmit = (e) => {
         e.preventDefault()
         addUserinfo({gender:selectedGender, height:selectedHeight, weight:selectedWeight})
+        goUser();
     }
     const [selectedGender, setSelectedGender] = useState("");
     const [selectedHeight, setSelectedHeight] = useState(0);
@@ -52,25 +75,16 @@ export const Register = () => {
             </form>
             </div>
         </div>
-        <div className="user-info">
-            <h1>
-                User Info
-            </h1>
-            <ul>
-                {userinfo.map((user) => {
-                    const {gender, height, weight} = user
-                
-                    return (
-                    <li>
-                        <h4>{gender}</h4>
-                        <h4>{height}</h4>
-                        <h4>{weight}</h4>
-                    
-                    </li>
-                    );
-                }
-                )}
-            </ul>
+        
+        <div className="sign-out">
+            <button className="sign-out-button" onClick={signUserOut}>
+                Sign out 
+            </button>
+        </div>
+        <div className="user-button">
+            <button className="user-button" onClick={goUser}>
+                User
+            </button>
         </div>
         </>
     )
