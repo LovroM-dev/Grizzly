@@ -1,0 +1,173 @@
+{
+    "exercises": [
+        {
+            "id": "bench_press",
+            "name": "Bench Press",
+            "equipment": "barbell",
+            "bodyParts": ["chest", "triceps", "deltoids"],
+            "custom": false
+        },
+        {
+            "id": "squat",
+            "name": "Squat",
+            "equipment": "barbell",
+            "bodyParts": ["quads", "hamstrings", "glutes"],
+            "custom": false
+        },
+        {
+            "id": "deadlift",
+            "name": "Deadlift",
+            "equipment": "barbell",
+            "bodyParts": ["spinal_erector", "hamstrings", "glutes", "traps"],
+            "custom": false
+        },
+        {
+            "id": "pull_up",
+            "name": "Pull Up",
+            "equipment": "body weight",
+            "bodyParts": ["lats", "biceps", "traps"],
+            "custom": false
+        },
+        {
+            "id": "push_up",
+            "name": "Push Up",
+            "equipment": "body weight",
+            "bodyParts": ["chest", "triceps", "deltoids"],
+            "custom": false
+        },
+        {
+            "id": "bicep_curl",
+            "name": "Bicep Curl",
+            "equipment": "dumbbell",
+            "bodyParts": ["biceps"],
+            "custom": false
+        },
+        {
+            "id": "tricep_dip",
+            "name": "Tricep Dip",
+            "equipment": "body weight",
+            "bodyParts": ["triceps"],
+            "custom": false
+        },
+        {
+            "id": "overhead_press",
+            "name": "Overhead Press",
+            "equipment": "barbell",
+            "bodyParts": ["deltoids", "triceps"],
+            "custom": false
+        },
+        {
+            "id": "barbell_row",
+            "name": "Barbell Row",
+            "equipment": "barbell",
+            "bodyParts": ["lats", "spinal_erector", "biceps"],
+            "custom": false
+        },
+        {
+            "id": "lat_pulldown",
+            "name": "Lat Pulldown",
+            "equipment": "cable",
+            "bodyParts": ["lats", "biceps"],
+            "custom": false
+        },
+        {
+            "id": "leg_press",
+            "name": "Leg Press",
+            "equipment": "machine",
+            "bodyParts": ["quads", "hamstrings", "glutes"],
+            "custom": false
+        },
+        {
+            "id": "chest_fly",
+            "name": "Chest Fly",
+            "equipment": "dumbbell",
+            "bodyParts": ["chest"],
+            "custom": false
+        },
+        {
+            "id": "plank",
+            "name": "Plank",
+            "equipment": "body weight",
+            "bodyParts": ["abdominals", "spinal_erector"],
+            "custom": false
+        },
+        {
+            "id": "shoulder_press",
+            "name": "Shoulder Press",
+            "equipment": "dumbbell",
+            "bodyParts": ["deltoids", "triceps"],
+            "custom": false
+        },
+        {
+            "id": "leg_extension",
+            "name": "Leg Extension",
+            "equipment": "machine",
+            "bodyParts": ["quads"],
+            "custom": false
+        },
+        {
+            "id": "leg_curl",
+            "name": "Leg Curl",
+            "equipment": "machine",
+            "bodyParts": ["hamstrings"],
+            "custom": false
+        },
+        {
+            "id": "calf_raise",
+            "name": "Calf Raise",
+            "equipment": "machine",
+            "bodyParts": ["calves"],
+            "custom": false
+        },
+        {
+            "id": "romanian_deadlift",
+            "name": "Romanian Deadlift",
+            "equipment": "barbell",
+            "bodyParts": ["hamstrings", "glutes", "spinal_erector"],
+            "custom": false
+        },
+        {
+            "id": "ab_crunch",
+            "name": "Ab Crunch",
+            "equipment": "machine",
+            "bodyParts": ["abdominals"],
+            "custom": false
+        },
+        {
+            "id": "lateral_raise",
+            "name": "Lateral Raise",
+            "equipment": "dumbbell",
+            "bodyParts": ["deltoids"],
+            "custom": false
+        },
+        {
+            "id": "dumbbell_row",
+            "name": "Dumbbell Row",
+            "equipment": "dumbbell",
+            "bodyParts": ["lats", "biceps"],
+            "custom": false
+        },
+        {
+            "id": "seated_cable_row",
+            "name": "Seated Cable Row",
+            "equipment": "cable",
+            "bodyParts": ["lats", "spinal_erector", "biceps"],
+            "custom": false
+        },
+        {
+            "id": "front_squat",
+            "name": "Front Squat",
+            "equipment": "barbell",
+            "bodyParts": ["quads", "glutes", "spinal_erector"],
+            "custom": false
+        },
+        {
+            "id": "hip_thrust",
+            "name": "Hip Thrust",
+            "equipment": "barbell",
+            "bodyParts": ["glutes", "hamstrings"],
+            "custom": false
+        }
+        
+    ]
+}

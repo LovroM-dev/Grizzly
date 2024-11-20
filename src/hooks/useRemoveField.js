@@ -23,7 +23,7 @@ export const useRemoveField = () => {
 
             
         } catch (error) {
-            console.error("Error adding field:", error);
+            console.error("Error removing field:", error);
         }
     };
 

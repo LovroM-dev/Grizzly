@@ -4,6 +4,8 @@ import { db } from "../../firebase/firebase"
 import { collection, arrayUnion, arrayRemove, deleteDoc, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore'
 import { useAddField } from "../../hooks/useAddField";
 import { useRemoveField } from "../../hooks/useRemoveField";
+import { uploadBodyParts } from "../../queries/uploadBodyParts";
+import { uploadExercises } from "../../queries/uploadExercises";
 export const Dbedit = () => {
     const [exercises, setExercise] = useState([]);
     const exerciseColRef = collection(db, "exercise");
@@ -15,8 +17,10 @@ export const Dbedit = () => {
           setExercise(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
         };
         getExercise();
-        addField("exercise", "custom", false);
+        //addField("exercise", "custom", false);
         //removeField("exercise", "fieldName")
+        //uploadBodyParts();
+        //uploadExercises();
       }, []);
     return (
 

@@ -1,0 +1,60 @@
+{
+    "bodyParts": [
+        {
+            "id": "chest",
+            "name": "Chest"
+        },
+        {
+            "id": "lats",
+            "name": "Lats"
+        },
+        {
+            "id": "traps",
+            "name": "Traps"
+        },
+        {
+            "id": "spinal_erector",
+            "name": "Spinal Erector"
+        },
+        {
+            "id": "biceps",
+            "name": "Biceps"
+        },
+        {
+            "id": "triceps",
+            "name": "Triceps"
+        },
+        {
+            "id": "deltoids",
+            "name": "Deltoids"
+        },
+        {
+            "id": "forearms",
+            "name": "Forearms"
+        },
+        {
+            "id": "quads",
+            "name": "Quads"
+        },
+        {
+            "id": "hamstrings",
+            "name": "Hamstrings"
+        },
+        {
+            "id": "calves",
+            "name": "Calves"
+        },
+        {
+            "id": "glutes",
+            "name": "Glutes"
+        },
+        {
+            "id": "abdominals",
+            "name": "Abdominals"
+        },
+        {
+            "id": "obliques",
+            "name": "Obliques"
+        }
+    ]
+}

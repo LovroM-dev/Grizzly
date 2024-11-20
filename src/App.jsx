@@ -6,6 +6,7 @@ import { User } from "./pages/user";
 import { Workout } from "./pages/workout";
 import {Exercises} from "./pages/exercises";
 import { Dbedit } from "./pages/dbedit";
+import {Create_exercise} from "./pages/create_exercise";
 function App(){
   
   return(
@@ -19,6 +20,7 @@ function App(){
           <Route path="/workout" exact element={<Workout/>} />
           <Route path="/exercises" exact element={<Exercises/>} />
           <Route path="/dbedit" exact element={<Dbedit/>} />
+          <Route path="/create-exercise" exact element={<Create_exercise/>} />
         </Routes>
       </Router>
     </div>
