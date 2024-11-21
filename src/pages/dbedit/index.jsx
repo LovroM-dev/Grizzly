@@ -20,7 +20,7 @@ export const Dbedit = () => {
         //addField("exercise", "custom", false);
         //removeField("exercise", "fieldName")
         //uploadBodyParts();
-        //uploadExercises();
+        uploadExercises();
       }, []);
     return (
 
