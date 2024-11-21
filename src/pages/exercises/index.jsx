@@ -6,7 +6,7 @@ import { useAddField } from "../../hooks/useAddField";
 import { useRemoveField } from "../../hooks/useRemoveField";
 export const Exercises = () => {
     const [exercises, setExercise] = useState([]);
-    const exerciseColRef = collection(db, "exercise");
+    const exerciseColRef = collection(db, "exercises");
     const { addField } = useAddField();
     const { removeField } = useRemoveField();
     useEffect(() => {
@@ -17,6 +17,13 @@ export const Exercises = () => {
         getExercise();
 
     }, []);
+    const deleteExercise = async(id) => {
+        const exerciseDoc = doc(db, "exercises", id)
+        await deleteDoc(exerciseDoc)
+       
+        console.log(id);
+        
+    }
     return (
 
         <div className="exercises">
@@ -24,11 +31,12 @@ export const Exercises = () => {
                 {exercises.map((exercise) => (
                     <div key={exercise.id}>
                         <h1>Name: {exercise.name}
-                            <button style={{ fontSize: "16px" }} onClick={() => deleteExercise(exercise.id)}>-</button>
+                            {exercise.custom && ( <button style={{ fontSize: "16px" }} onClick={() => deleteExercise(exercise.id)}>-</button>)}
+                           
                         </h1>
                         <h2>Target muscle:</h2>
 
-                        {exercise.target_muscle.map((muscle, index) => (
+                        {exercise.bodyParts.map((muscle, index) => (
                             <h3 key={index}>{muscle}
 
                             </h3>
