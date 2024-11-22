@@ -9,6 +9,7 @@ import { Dbedit } from "./pages/dbedit";
 import {Create_exercise} from "./pages/create_exercise";
 import { Choose_bodypart } from "./pages/create_exercise/choose_bodypart";
 import { Choose_equipment } from "./pages/create_exercise/choose_equipment";
+import { Filter } from "./pages/exercises/filter";
 function App(){
   
   return(
@@ -25,6 +26,7 @@ function App(){
           <Route path="/create-exercise" exact element={<Create_exercise/>} />
           <Route path="/choose-bodypart" exact element={<Choose_bodypart/>} />
           <Route path="/choose-equipment" exact element={<Choose_equipment/>} />
+          <Route path="/filter" exact element={<Filter/>} />
         </Routes>
       </Router>
     </div>
