@@ -11,6 +11,8 @@ import { Choose_bodypart } from "./pages/create_exercise/choose_bodypart";
 import { Choose_equipment } from "./pages/create_exercise/choose_equipment";
 import { Filter } from "./pages/exercises/filter";
 import { Workout_exercises } from "./pages/workout/workout-exercises";
+import { WorkoutPreview } from "./pages/workout/workout-preview";
+import { Premade_workout } from "./pages/workout/Premade-workout";
 function App(){
   
   return(
@@ -29,6 +31,9 @@ function App(){
           <Route path="/choose-equipment" exact element={<Choose_equipment/>} />
           <Route path="/filter" exact element={<Filter/>} />
           <Route path="/workout-exercises" exact element={<Workout_exercises/>} />
+          
+          <Route path="/workout-preview" element={<WorkoutPreview />} />
+          <Route path="/pre-workout" element={<Premade_workout />} />
         </Routes>
       </Router>
     </div>

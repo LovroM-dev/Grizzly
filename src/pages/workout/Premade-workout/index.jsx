@@ -1,55 +1,104 @@
 import React, { useEffect } from "react";
-import { useGetUserinfo } from "../../hooks/useGetUserinfo";
-import { useNavigate } from "react-router-dom";
-import { useChangeUserinfo } from "../../hooks/useChangeUserinfo";
+import { useGetUserinfo } from "../../../hooks/useGetUserinfo";
+import { useChangeUserinfo } from "../../../hooks/useChangeUserinfo";
 import { useState } from "react";
-import { Workout_exercises } from "./workout-exercises";
-import { collection, getDocs, addDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebase";
-export const Workout = () => {
+import { useNavigate, useLocation } from "react-router-dom";
+import { Workout_exercises } from "./../workout-exercises";
+import { collection, getDocs, addDoc, doc, setDoc } from "firebase/firestore";
+import { db } from "../../../firebase/firebase";
+
+export const Premade_workout = () => {
+    const location = useLocation();
+    const passedWorkout = location.state?.workout;
     const [exerciseVis, setExerciseVis] = useState(false);
     const [selectedExercises, setSelectedExercises] = useState([])
     const [allSelectedExercises, setAllSelectedExercises] = useState([])
-    const [selectedExercisesData, setSelectedExercisesData] = useState([])
-    const [exerciseSets, setExerciseSets] = useState({});
+    const [workoutTitle, setWorkoutTitle] = useState(passedWorkout?.title || "Click to edit title");
+    const [selectedExercisesData, setSelectedExercisesData] = useState(passedWorkout?.exercises || []);
+    const [exerciseSets, setExerciseSets] = useState(() => {
+        const sets = {};
+        passedWorkout?.exercises.forEach((exercise) => {
+            sets[exercise.id] = exercise.sets || [];
+        });
+        return sets;
+    });
+
 
 
     const { userinfo } = useGetUserinfo();
-    const [workoutTitle, setWorkoutTitle] = useState("Click to edit title");
     const { changeUserinfo } = useChangeUserinfo();
     const navigate = useNavigate();
 
     const exerciseColRef = collection(db, "exercises");
+
+
+
+
     useEffect(() => {
+        if (passedWorkout?.exercises) {
+            const ids = passedWorkout.exercises.map((ex) => ex.id);
+            setAllSelectedExercises((prev) => [...new Set([...prev, ...ids])]);
+            setSelectedExercisesData(passedWorkout.exercises);
+        }
+        console.log(passedWorkout.id);
 
-        getSelectedExercisesData();
+    }, [passedWorkout]);
 
-    },);
     useEffect(() => {
+        if (selectedExercises.length > 0) {
+            setAllSelectedExercises((prev) => [
+                ...new Set([...prev, ...selectedExercises]),
+            ]);
+        }
+    }, [selectedExercises]);
 
-        const newAll = allSelectedExercises.concat(selectedExercises)
-        setAllSelectedExercises(newAll)
-
-    }, [selectedExercises])
     useEffect(() => {
-        getSelectedExercisesData();
-    }, [allSelectedExercises])
+        const getSelectedExercisesData = async () => {
+            const data = await getDocs(exerciseColRef);
+            const allExercises = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+            const newExercises = allSelectedExercises
+                .map((id) => allExercises.find((exercise) => exercise.id === id))
+                .filter(Boolean);
+
+            setSelectedExercisesData((prevData) => {
+                const existingIds = new Set(prevData.map((exercise) => exercise.id));
+                return [
+                    ...prevData,
+                    ...newExercises.filter((exercise) => !existingIds.has(exercise.id)),
+                ];
+            });
+        };
+
+        if (allSelectedExercises.length > 0) {
+            getSelectedExercisesData();
+        }
+    }, [allSelectedExercises]);
+
+
+
+
+
     const getSelectedExercisesData = async () => {
-        const data = await getDocs(exerciseColRef); // Fetch all exercises
+        const data = await getDocs(exerciseColRef);
         const allExercises = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-        // Filter exercises to only include those in selectedExercises
-        const filteredExercisesx = allExercises.filter((exercise) =>
-            allSelectedExercises.includes(exercise.id)
-        );
-        const filteredExercises = allSelectedExercises.map((el) =>
-            allExercises.find((exercise) => exercise.id == el)
-        );
+        // Map selected IDs to exercise data
+        const newExercises = allSelectedExercises
+            .map((id) => allExercises.find((exercise) => exercise.id === id))
+            .filter(Boolean); // Remove any null values (not found)
 
-        setSelectedExercisesData(filteredExercises); // Set state with filtered data
-        //console.log(filteredExercises);
-
+        // Add only unique exercises
+        setSelectedExercisesData((prevData) => {
+            const existingIds = new Set(prevData.map((exercise) => exercise.id));
+            return [
+                ...prevData,
+                ...newExercises.filter((exercise) => !existingIds.has(exercise.id)),
+            ];
+        });
     };
+
+
 
 
     const onClickTitle = () => {
@@ -124,6 +173,7 @@ export const Workout = () => {
 
     const saveWorkout = async () => {
         try {
+            // Construct the workout data
             const workoutData = {
                 title: workoutTitle,
                 exercises: selectedExercisesData.map((exercise) => ({
@@ -131,14 +181,23 @@ export const Workout = () => {
                     name: exercise.name,
                     sets: exerciseSets[exercise.id] || [], // Include sets for each exercise
                 })),
-                timestamp: new Date(), // Add a timestamp for sorting or tracking
+                timestamp: new Date(), // Add a timestamp for tracking
             };
 
-            const workoutColRef = collection(db, "workouts");
-            await addDoc(workoutColRef, workoutData);
-
-            alert("Workout saved successfully!");
-            navigate("/workout-preview")
+            // Check if we are editing an existing workout
+            if (passedWorkout?.id) {
+                // Update the existing document
+                const workoutDocRef = doc(db, "workouts", passedWorkout.id);
+                await setDoc(workoutDocRef, workoutData); // Overwrite the document
+                navigate("/workout-preview")
+                alert("Workout updated successfully!");
+            } else {
+                // Create a new document
+                const workoutColRef = collection(db, "workouts");
+                await addDoc(workoutColRef, workoutData);
+                navigate("/workout-preview")
+                alert("Workout saved successfully!");
+            }
         } catch (error) {
             console.error("Error saving workout: ", error);
             alert("Failed to save workout. Please try again.");
@@ -148,6 +207,20 @@ export const Workout = () => {
     return (
 
         <div className="workout">
+
+            <button
+                onClick={() => navigate("/workout-preview")}
+                style={{
+                    marginBottom: "20px",
+                    padding: "10px 20px",
+                    backgroundColor: "#f0f0f0",
+                    border: "1px solid #ccc",
+                    cursor: "pointer",
+                }}
+            >
+                Back
+            </button>
+
             <div className="workout-title">
                 <h2 onClick={onClickTitle}>{workoutTitle}</h2>
             </div>
@@ -155,7 +228,7 @@ export const Workout = () => {
                 {selectedExercisesData.map((exercise) => (
                     <div key={exercise.id} style={{ borderStyle: "solid" }}>
                         <button value={exercise.id} onClick={removeExercise}>Remove</button>
-                        
+
                         <h1>
                             Name: {exercise.name}
                             {exercise.custom && (
