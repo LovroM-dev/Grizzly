@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useChangeUserinfo } from "../../hooks/useChangeUserinfo";
 import { useState } from "react";
 import { Workout_exercises } from "./workout-exercises";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, addDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 export const Workout = () => {
     const [exerciseVis, setExerciseVis] = useState(false);
@@ -121,6 +121,29 @@ export const Workout = () => {
         });
     };
 
+
+    const saveWorkout = async () => {
+        try {
+            const workoutData = {
+                title: workoutTitle,
+                exercises: selectedExercisesData.map((exercise) => ({
+                    id: exercise.id,
+                    name: exercise.name,
+                    sets: exerciseSets[exercise.id] || [], // Include sets for each exercise
+                })),
+                timestamp: new Date(), // Add a timestamp for sorting or tracking
+            };
+
+            const workoutColRef = collection(db, "workouts");
+            await addDoc(workoutColRef, workoutData);
+
+            alert("Workout saved successfully!");
+        } catch (error) {
+            console.error("Error saving workout: ", error);
+            alert("Failed to save workout. Please try again.");
+        }
+    };
+
     return (
 
         <div className="workout">
@@ -192,6 +215,10 @@ export const Workout = () => {
             <div className="add-exercise">
                 <h1 onClick={onClickAddExercise}>+ Add exercise</h1>
             </div>
+            <div className="save-workout">
+                <button onClick={saveWorkout}>Save Workout</button>
+            </div>
+
             {exerciseVis && <Workout_exercises
                 onSave={handleSelectedExercises}
                 onClose={() => setExerciseVis(false)} />}
