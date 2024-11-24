@@ -23,10 +23,9 @@ export const Workout = () => {
        
     }, );
     useEffect(() => {
-        console.log(selectedExercises);
+
         const newAll = allSelectedExercises.concat(selectedExercises)
         setAllSelectedExercises(newAll)
-        console.log("All selected ", allSelectedExercises);
         
     }, [selectedExercises])
     useEffect(()=>{
@@ -37,11 +36,16 @@ export const Workout = () => {
         const allExercises = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     
         // Filter exercises to only include those in selectedExercises
-        const filteredExercises = allExercises.filter((exercise) =>
+        const filteredExercisesx = allExercises.filter((exercise) =>
             allSelectedExercises.includes(exercise.id)
+        );
+        const filteredExercises = allSelectedExercises.map((el) => 
+            allExercises.find((exercise) => exercise.id == el)
         );
     
         setSelectedExercisesData(filteredExercises); // Set state with filtered data
+        //console.log(filteredExercises);
+        
     };
 
 
@@ -61,6 +65,23 @@ export const Workout = () => {
     const selectedExercise = () =>{
 
     }
+    const removeExercise = (e) => {
+    const exId = e.target.value;
+
+    // Update selected and allSelected arrays
+    const updatedAllSelectedExercises = allSelectedExercises.filter(
+        (exercise) => exercise !== exId
+    );
+
+    setAllSelectedExercises(updatedAllSelectedExercises);
+
+    // Directly refetch data to avoid stale state
+    const filteredExercises = selectedExercisesData.filter(
+        (exercise) => exercise.id !== exId
+    );
+    setSelectedExercisesData(filteredExercises);
+};
+
     return (
 
         <div className="workout">
@@ -70,6 +91,7 @@ export const Workout = () => {
             <div className="current-exercises">
             {selectedExercisesData.map((exercise) => (
                         <div key={exercise.id} style={{borderStyle:" solid"}}>
+                            <button value={exercise.id} onClick={removeExercise}>Remove</button>
                             <input value={exercise.id}type="checkbox" key={"checkbox"+exercise.id} onClick={selectedExercise} />
                             <h1>Name: {exercise.name}
                                 {exercise.custom && (<button style={{ fontSize: "16px" }} onClick={() => deleteExercise(exercise.id)}>-</button>)}
