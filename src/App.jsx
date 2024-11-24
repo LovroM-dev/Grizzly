@@ -10,6 +10,7 @@ import {Create_exercise} from "./pages/create_exercise";
 import { Choose_bodypart } from "./pages/create_exercise/choose_bodypart";
 import { Choose_equipment } from "./pages/create_exercise/choose_equipment";
 import { Filter } from "./pages/exercises/filter";
+import { Workout_exercises } from "./pages/workout/workout-exercises";
 function App(){
   
   return(
@@ -27,6 +28,7 @@ function App(){
           <Route path="/choose-bodypart" exact element={<Choose_bodypart/>} />
           <Route path="/choose-equipment" exact element={<Choose_equipment/>} />
           <Route path="/filter" exact element={<Filter/>} />
+          <Route path="/workout-exercises" exact element={<Workout_exercises/>} />
         </Routes>
       </Router>
     </div>

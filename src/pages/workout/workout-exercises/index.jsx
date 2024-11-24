@@ -1,19 +1,17 @@
 import React from "react";
 import { useEffect, useState } from 'react'
-import { db } from "../../firebase/firebase"
+import { db } from "../../../firebase/firebase"
 import { collection, arrayUnion, arrayRemove, deleteDoc, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore'
-import { useAddField } from "../../hooks/useAddField";
-import { useRemoveField } from "../../hooks/useRemoveField";
-import { Create_exercise } from "../create_exercise";
-import { Filter } from "./filter";
-export const Exercises = () => {
+import { useAddField } from "../../../hooks/useAddField";
+import { useRemoveField } from "../../../hooks/useRemoveField";
+import { Filter } from "../../exercises/filter";
+export const Workout_exercises = ({onSave, onClose}) => {
     const [exercises, setExercise] = useState([]);
     const [newExercises, setNewExercise] = useState([]);
-    const [visibility, setVisibility] = useState(false)
     const [visibilityF, setVisibilityF] = useState(false)
     const [bodyPartFilter, setBodyPartFilter] = useState([])
     const [equipmentFilter, setEquipmentFilter] = useState([])
-
+    const [selectedExercises, setSelectedExercises] = useState([])
     const exerciseColRef = collection(db, "exercises");
     const { addField } = useAddField();
     const { removeField } = useRemoveField();
@@ -37,10 +35,6 @@ export const Exercises = () => {
         await deleteDoc(exerciseDoc)
         getExercise();
     }
-    const showCreateExercise = async (vis) => {
-        setVisibility(vis)
-
-    }
     const showCreateExerciseF = async (vis) => {
         setVisibilityF(vis)
     }
@@ -50,9 +44,7 @@ export const Exercises = () => {
 
         
     }
-    const clearFilters = () => {
-        
-    }
+   
     function capitalizeFirstLetter(val) {
         return String(val).charAt(0).toUpperCase() + String(val).slice(1);
     }
@@ -80,20 +72,34 @@ export const Exercises = () => {
             
             
         })
-       
-        console.log(filteredEx, bodyPartFilter, equipmentFilter);
-        
         setNewExercise(filteredEx)
     };
-
+    const choosenExercise = (e) => {
+        const selectedExerciseId = e.target.value; // Get the exercise ID
+        const isChecked = e.target.checked; // Check if the checkbox is checked or unchecked
+    
+        setSelectedExercises((prevSelected) =>
+            isChecked
+                ? [...prevSelected, selectedExerciseId] // Add if checked
+                : prevSelected.filter((id) => id !== selectedExerciseId) // Remove if unchecked
+        );
+    }
+    const saveSelectedExercises = () =>{
+        onSave(selectedExercises);
+        onClose();
+    }
     return (
         <>
             <div className="exercises">
-                <div className="create-exercise">
-                    <button onClick={() => showCreateExercise(!visibility)}>+</button>
-                    {visibility && <Create_exercise />}
+                <div className="add-exercises">
+                    {(selectedExercises.length==1)&&
+                        <button onClick={saveSelectedExercises}>Add {selectedExercises.length}exercise</button>
+                    }
+                    {(selectedExercises.length>1)&&
+                        <button onClick={saveSelectedExercises}>Add {selectedExercises.length}exercises</button>
 
-
+                    }
+                    
                 </div>
                 <div className="filter-button">
                     <button onClick={() => showCreateExerciseF(!visibilityF)}>Filter</button>
@@ -103,7 +109,8 @@ export const Exercises = () => {
                 </div>
                 <div className="exercise-list">
                     {newExercises.map((exercise) => (
-                        <div key={exercise.id}>
+                        <div key={exercise.id} style={{borderStyle:" solid"}}>
+                            <input value={exercise.id}type="checkbox" key={"checkbox"+exercise.id} onClick={choosenExercise} />
                             <h1>Name: {exercise.name}
                                 {exercise.custom && (<button style={{ fontSize: "16px" }} onClick={() => deleteExercise(exercise.id)}>-</button>)}
 
