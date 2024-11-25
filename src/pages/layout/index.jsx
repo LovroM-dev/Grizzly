@@ -8,9 +8,6 @@ const Layout = () => {
             <nav style={{ background: "#f8f8f8", padding: "10px" }}>
                 <ul style={{ listStyle: "none", display: "flex", gap: "20px" }}>
                     <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
                         <Link to="/workout-preview">Workout</Link>
                     </li>
                     <li>

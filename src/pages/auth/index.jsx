@@ -1,11 +1,29 @@
 import { auth, provider, db } from "../../firebase/firebase";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, onAuthStateChanged  } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const Auth = () => {
     const navigate = useNavigate();
+    useEffect(() => {
+        const checkAuthState = async () => {
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const authInfo = {
+                        userID: user.uid,
+                        name: user.displayName,
+                        profilePhoto: user.photoURL,
+                        isAuth: true,
+                    };
+                    localStorage.setItem("auth", JSON.stringify(authInfo));
+                    navigate("/user"); 
+                }
+            });
+        };
 
+        checkAuthState();
+    }, [navigate]);
     const signInWithGoogle = async () => {
         try {
             const results = await signInWithPopup(auth, provider);
