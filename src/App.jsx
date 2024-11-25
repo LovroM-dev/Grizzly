@@ -20,9 +20,9 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
+        <Route path="/" exact element={<Auth />} />
+        <Route path="/auth" exact element={<Auth />} />
           <Route path="/" element={<Layout />} >
-            <Route path="/auth" exact element={<Auth />} />
-            <Route path="/auth" exact element={<Auth />} />
             <Route path="/register" exact element={<Register />} />
             <Route path="/user" exact element={<User />} />
             <Route path="/workout" exact element={<Workout />} />
