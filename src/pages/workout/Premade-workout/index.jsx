@@ -173,36 +173,28 @@ export const Premade_workout = () => {
 
     const saveWorkout = async () => {
         try {
-            // Construct the workout data
+            const authInfo = JSON.parse(localStorage.getItem("auth")); // Retrieve user info
             const workoutData = {
+                userID: authInfo.userID, // Associate workout with user
                 title: workoutTitle,
                 exercises: selectedExercisesData.map((exercise) => ({
                     id: exercise.id,
                     name: exercise.name,
                     sets: exerciseSets[exercise.id] || [], // Include sets for each exercise
                 })),
-                timestamp: new Date(), // Add a timestamp for tracking
+                timestamp: new Date(), // Add a timestamp for sorting or tracking
             };
-
-            // Check if we are editing an existing workout
-            if (passedWorkout?.id) {
-                // Update the existing document
-                const workoutDocRef = doc(db, "workouts", passedWorkout.id);
-                await setDoc(workoutDocRef, workoutData); // Overwrite the document
-                navigate("/workout-preview")
-                alert("Workout updated successfully!");
-            } else {
-                // Create a new document
-                const workoutColRef = collection(db, "workouts");
-                await addDoc(workoutColRef, workoutData);
-                navigate("/workout-preview")
-                alert("Workout saved successfully!");
-            }
+    
+            const workoutColRef = collection(db, "workouts");
+            await addDoc(workoutColRef, workoutData);
+    
+            alert("Workout saved successfully!");
         } catch (error) {
             console.error("Error saving workout: ", error);
             alert("Failed to save workout. Please try again.");
         }
     };
+    
 
     return (
 

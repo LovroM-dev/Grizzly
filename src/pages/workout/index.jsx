@@ -124,7 +124,9 @@ export const Workout = () => {
 
     const saveWorkout = async () => {
         try {
+            const authInfo = JSON.parse(localStorage.getItem("auth")); // Retrieve user info
             const workoutData = {
+                userID: authInfo.userID, // Associate workout with user
                 title: workoutTitle,
                 exercises: selectedExercisesData.map((exercise) => ({
                     id: exercise.id,
@@ -133,7 +135,6 @@ export const Workout = () => {
                 })),
                 timestamp: new Date(), // Add a timestamp for sorting or tracking
             };
-
             const workoutColRef = collection(db, "workouts");
             await addDoc(workoutColRef, workoutData);
 

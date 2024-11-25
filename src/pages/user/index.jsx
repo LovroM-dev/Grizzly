@@ -2,6 +2,8 @@ import React from "react";
 import { useGetUserinfo } from "../../hooks/useGetUserinfo";
 import { useNavigate } from "react-router-dom";
 import { useChangeUserinfo } from "../../hooks/useChangeUserinfo";
+import { signOut } from "firebase/auth";
+import {auth} from "../../firebase/firebase"
 export const User = () => {
 
     const { userinfo } = useGetUserinfo();
@@ -16,7 +18,16 @@ export const User = () => {
         
         changeUserinfo(userId, updates);
     }
-
+    const signUserOut = async () => {
+        try{
+            await signOut(auth);
+            localStorage.clear();
+            navigate("../auth")
+        }
+        catch (err){
+            console.log(err)
+        }
+    };
     return (
         <div className="user-info">
             <h1>
@@ -37,6 +48,11 @@ export const User = () => {
                 }
                 )}
             </ul>
+            <div className="sign-out">
+            <button className="sign-out-button" onClick={signUserOut}>
+                Sign out 
+            </button>
+        </div>
         </div>
     );
 }

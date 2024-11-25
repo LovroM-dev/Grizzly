@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -10,17 +10,16 @@ export const WorkoutPreview = () => {
     // Fetch workouts from Firestore
     useEffect(() => {
         const fetchWorkouts = async () => {
-            try {
-                const workoutColRef = collection(db, "workouts");
-                const data = await getDocs(workoutColRef);
-                const workoutsData = data.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-                setWorkouts(workoutsData);
-            } catch (error) {
-                console.error("Error fetching workouts: ", error);
-            }
+            const authInfo = JSON.parse(localStorage.getItem("auth")); // Retrieve user info
+            const workoutColRef = collection(db, "workouts");
+            const q = query(workoutColRef, where("userID", "==", authInfo.userID));
+        
+            const querySnapshot = await getDocs(q);
+            const workouts = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setWorkouts(workouts)
         };
 
         fetchWorkouts();

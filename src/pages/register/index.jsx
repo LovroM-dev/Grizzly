@@ -13,7 +13,7 @@ export const Register = () => {
         try{
             await signOut(auth);
             localStorage.clear();
-            navigate("auth")
+            navigate("../auth")
         }
         catch (err){
             console.log(err)
