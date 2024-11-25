@@ -21,7 +21,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Layout />} >
-            <Route path="/" exact element={<Auth />} />
+            <Route path="/auth" exact element={<Auth />} />
             <Route path="/auth" exact element={<Auth />} />
             <Route path="/register" exact element={<Register />} />
             <Route path="/user" exact element={<User />} />
